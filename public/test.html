@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .imgfile {
+            display: inline-block;
+            padding: 20px;
+            border: 1px dashed #666;
+            position: relative;
+        }
+
+        .imgfile input {
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .imgName p {
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <form name="form">
+        <span>姓名：</span><input type="text" name="name">
+        <span>年龄：</span><input type="text" name="age">
+        <span>性别：</span><input type="text" name="gener">
+    </form>
+    <button class="upload">上传</button>
+    <button class="find">查询</button>
+    <button class="del">删除</button>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        let t = {}
+        document.querySelector(".upload").addEventListener("click", () => {
+            const _this = document.querySelector("form")
+            t.name = _this.name.value
+            t.age = _this.age.value
+            t.gener = _this.gener.value
+            axios.post("http://localhost:3000/user/addUser", t)
+                .then(function (res) {
+                    console.log(res)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        })
+        document.querySelector(".find").addEventListener("click", () => {
+            axios.post("http://localhost:3000/user/findUser")
+                .then(function (res) {
+                    console.log(res)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        })
+        document.querySelector(".del").addEventListener("click", () => {
+            axios.post("http://localhost:3000/user/delUser", { name: document.querySelector("form").name.value })
+                .then(function (res) {
+                    if (res.data.msg == 1) {
+                        alert("删除成功")
+                    } else {
+                        alert("失败")
+                    }
+                    console.log(res)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        })
+    </script>
+</body>
+
+</html>
